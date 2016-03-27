@@ -20,16 +20,26 @@ using Capture.Interface;
 using Capture.Hook;
 using Capture;
 using ImageFormat = Capture.Interface.ImageFormat;
+using proto;
 
 namespace TestScreenshot
 {
   public partial class Form1 : Form
   {
+    private static TcpClient Socket = new TcpClient();
+    private readonly Stream Stream;
     private System.Windows.Forms.Timer hyperionTimer;
-    private int hyperionInterval = 60;
+    private int hyperionInterval = 250;
     public Form1()
     {
       InitializeComponent();
+
+      // PROTO
+      Socket = new TcpClient();
+      Socket.SendTimeout = 5000;
+      Socket.ReceiveTimeout = 5000;
+      Socket.Connect("10.1.2.83", 19445);
+      Stream = Socket.GetStream();
 
       // JSON
       ConnectToServer("10.1.2.83", 19444);
@@ -45,7 +55,7 @@ namespace TestScreenshot
         resize = new System.Drawing.Size(int.Parse(txtResizeWidth.Text), int.Parse(txtResizeHeight.Text));
       _captureProcess.CaptureInterface.BeginGetScreenshot(
         new Rectangle(int.Parse(txtCaptureX.Text), int.Parse(txtCaptureY.Text), int.Parse(txtCaptureWidth.Text),
-          int.Parse(txtCaptureHeight.Text)), new TimeSpan(0, 0, 2), Callback, resize,
+          int.Parse(txtCaptureHeight.Text)), new TimeSpan(0, 0, 1), Callback, resize,
         (ImageFormat)Enum.Parse(typeof(ImageFormat), cmbFormat.Text));
     }
 
@@ -175,7 +185,7 @@ namespace TestScreenshot
     /// <param name="message"></param>
     void CaptureInterface_RemoteMessage(MessageReceivedEventArgs message)
     {
-      txtDebugLog.Invoke(new MethodInvoker(delegate()
+      txtDebugLog.Invoke(new MethodInvoker(delegate ()
       {
         txtDebugLog.Text = String.Format("{0}\r\n{1}", message, txtDebugLog.Text);
       })
@@ -189,7 +199,7 @@ namespace TestScreenshot
     /// <param name="message"></param>
     void ScreenshotManager_OnScreenshotDebugMessage(int clientPID, string message)
     {
-      txtDebugLog.Invoke(new MethodInvoker(delegate()
+      txtDebugLog.Invoke(new MethodInvoker(delegate ()
       {
         txtDebugLog.Text = String.Format("{0}:{1}\r\n{2}", clientPID, message, txtDebugLog.Text);
       })
@@ -228,7 +238,7 @@ namespace TestScreenshot
     /// </summary>
     void DoRequest()
     {
-      progressBar1.Invoke(new MethodInvoker(delegate()
+      progressBar1.Invoke(new MethodInvoker(delegate ()
       {
         if (progressBar1.Value < progressBar1.Maximum)
         {
@@ -242,7 +252,7 @@ namespace TestScreenshot
           _captureProcess.CaptureInterface.BeginGetScreenshot(
             new Rectangle(int.Parse(txtCaptureX.Text), int.Parse(txtCaptureY.Text), int.Parse(txtCaptureWidth.Text),
               int.Parse(txtCaptureHeight.Text)), new TimeSpan(0, 0, 2), Callback, resize,
-            (ImageFormat) Enum.Parse(typeof (ImageFormat), cmbFormat.Text));
+            (ImageFormat)Enum.Parse(typeof(ImageFormat), cmbFormat.Text));
         }
         else
         {
@@ -280,16 +290,12 @@ namespace TestScreenshot
             })
               );*/
 
-            Bitmap bitmapResized = new Bitmap(screenshot.ToBitmap(), new Size(64, 64));
-            //bitmapResized.Save("10.bmp");
-
             MemoryStream ms = new System.IO.MemoryStream();
-            System.Drawing.RectangleF cloneRect = new System.Drawing.RectangleF(0, 0, bitmapResized.Width, bitmapResized.Height);
-            Bitmap cloneBitmap = bitmapResized.Clone(cloneRect, PixelFormat.Format32bppRgb);
-            cloneBitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+            screenshot.ToBitmap().Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
 
             byte[] pixeldata = ms.ToArray();
             pushImage(pixeldata);
+            ms.Close();
           }
 
           Thread t = new Thread(new ThreadStart(DoRequest));
@@ -370,19 +376,90 @@ namespace TestScreenshot
           x++;
         }
 
-        // JSON
-        var y = Convert.ToBase64String(newpixeldata);
-        StreamWriter sw = new StreamWriter("output.log");
-        sw.WriteLine(y);
-        sw.Close();
+        // PROTO
+        ChangeImage(newpixeldata, null);
 
-        setImage(y, 1, 5000);
+        // JSON
+        //var y = Convert.ToBase64String(newpixeldata);
+        //setImage(y, 1, 5000);
       }
       catch (Exception)
       {
       }
     }
 
+    public void ChangeImage(byte[] pixeldata, byte[] bmiInfoHeader)
+    {
+      try
+      {
+        ImageRequest imageRequest = ImageRequest.CreateBuilder()
+          .SetImagedata(Google.ProtocolBuffers.ByteString.CopyFrom(pixeldata))
+          .SetImageheight(64)
+          .SetImagewidth(64)
+          .SetPriority(10)
+          .SetDuration(-1)
+          .Build();
+
+        HyperionRequest request = HyperionRequest.CreateBuilder()
+          .SetCommand(HyperionRequest.Types.Command.IMAGE)
+          .SetExtension(ImageRequest.ImageRequest_, imageRequest)
+          .Build();
+
+        SendRequest(request);
+      }
+      catch (Exception e)
+      {
+        //MessageBox.Show("ChangeImage: " + e.Message);
+      }
+    }
+    private void SendRequest(HyperionRequest request)
+    {
+      try
+      {
+        if (Socket.Connected)
+        {
+          int size = request.SerializedSize;
+
+          Byte[] header = new byte[4];
+          header[0] = (byte)((size >> 24) & 0xFF);
+          header[1] = (byte)((size >> 16) & 0xFF);
+          header[2] = (byte)((size >> 8) & 0xFF);
+          header[3] = (byte)((size) & 0xFF);
+
+          int headerSize = header.Count();
+          Stream.Write(header, 0, headerSize);
+          request.WriteTo(Stream);
+          Stream.Flush();
+
+          // Enable reply message if needed (debugging only)
+          HyperionReply reply = ReceiveReply();
+          //MessageBox.Show(reply.ToString());
+        }
+      }
+      catch (Exception e)
+      {
+        //MessageBox.Show("SendRequest: " + e.Message);
+      }
+    }
+    private HyperionReply ReceiveReply()
+    {
+      try
+      {
+        Stream input = Socket.GetStream();
+        byte[] header = new byte[4];
+        input.Read(header, 0, 4);
+        int size = (header[0] << 24) | (header[1] << 16) | (header[2] << 8) | (header[3]);
+        byte[] data = new byte[size];
+        input.Read(data, 0, size);
+        HyperionReply reply = HyperionReply.ParseFrom(data);
+        return reply;
+      }
+      catch (Exception e)
+      {
+        //MessageBox.Show("receiveReply: " + e.Message);
+        return null;
+      }
+    }
     static void setImage(string base64Image, int priority, int duration)
     {
       try
@@ -405,7 +482,7 @@ namespace TestScreenshot
       }
       catch (Exception ex)
       {
-        MessageBox.Show("Failed to create JSON Message. " + ex.Message);
+        //MessageBox.Show("Failed to create JSON Message. " + ex.Message);
       }
     }
 
@@ -420,12 +497,12 @@ namespace TestScreenshot
 
         if (response != "{\"success\":true}")
         {
-          MessageBox.Show("Hyperion error. " + response);
+          //MessageBox.Show("Hyperion error. " + response);
         }
       }
       catch (Exception ex)
       {
-        MessageBox.Show("Failed to send message to Hyperion Server. " + ex.Message);
+        //MessageBox.Show("Failed to send message to Hyperion Server. " + ex.Message);
       }
 
     }
@@ -445,12 +522,10 @@ namespace TestScreenshot
       if (hyperionTimer.Enabled)
       {
         hyperionTimer.Stop();
-        btnStartHyperionMonitor.Text = "Start Ambilight";
       }
       else
       {
         hyperionTimer.Start();
-        btnStartHyperionMonitor.Text = "Stop Ambilight";
       }
     }
   }

@@ -43,5 +43,29 @@ namespace TestScreenshot.Properties {
                 this["exeName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string resizeWidth {
+            get {
+                return ((string)(this["resizeWidth"]));
+            }
+            set {
+                this["resizeWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string resizeHeight {
+            get {
+                return ((string)(this["resizeHeight"]));
+            }
+            set {
+                this["resizeHeight"] = value;
+            }
+        }
     }
 }

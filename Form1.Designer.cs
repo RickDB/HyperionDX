@@ -56,13 +56,13 @@
       this.label8 = new System.Windows.Forms.Label();
       this.label9 = new System.Windows.Forms.Label();
       this.txtResizeHeight = new System.Windows.Forms.TextBox();
-      this.txtResizeWidth = new System.Windows.Forms.TextBox();
       this.label10 = new System.Windows.Forms.Label();
       this.label11 = new System.Windows.Forms.Label();
       this.label12 = new System.Windows.Forms.Label();
       this.cmbFormat = new System.Windows.Forms.ComboBox();
-      this.textBox1 = new System.Windows.Forms.TextBox();
       this.btnStartHyperionMonitor = new System.Windows.Forms.Button();
+      this.txtResizeWidth = new System.Windows.Forms.TextBox();
+      this.textBox1 = new System.Windows.Forms.TextBox();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.SuspendLayout();
       // 
@@ -324,17 +324,12 @@
       // 
       // txtResizeHeight
       // 
+      this.txtResizeHeight.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::TestScreenshot.Properties.Settings.Default, "resizeHeight", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
       this.txtResizeHeight.Location = new System.Drawing.Point(140, 255);
       this.txtResizeHeight.Name = "txtResizeHeight";
       this.txtResizeHeight.Size = new System.Drawing.Size(47, 20);
       this.txtResizeHeight.TabIndex = 32;
-      // 
-      // txtResizeWidth
-      // 
-      this.txtResizeWidth.Location = new System.Drawing.Point(43, 255);
-      this.txtResizeWidth.Name = "txtResizeWidth";
-      this.txtResizeWidth.Size = new System.Drawing.Size(47, 20);
-      this.txtResizeWidth.TabIndex = 31;
+      this.txtResizeHeight.Text = global::TestScreenshot.Properties.Settings.Default.resizeHeight;
       // 
       // label10
       // 
@@ -377,6 +372,25 @@
       this.cmbFormat.TabIndex = 34;
       this.cmbFormat.Text = "Bitmap";
       // 
+      // btnStartHyperionMonitor
+      // 
+      this.btnStartHyperionMonitor.Location = new System.Drawing.Point(13, 59);
+      this.btnStartHyperionMonitor.Name = "btnStartHyperionMonitor";
+      this.btnStartHyperionMonitor.Size = new System.Drawing.Size(74, 23);
+      this.btnStartHyperionMonitor.TabIndex = 35;
+      this.btnStartHyperionMonitor.Text = "Hyperion!";
+      this.btnStartHyperionMonitor.UseVisualStyleBackColor = true;
+      this.btnStartHyperionMonitor.Click += new System.EventHandler(this.btnStartHyperionMonitor_Click);
+      // 
+      // txtResizeWidth
+      // 
+      this.txtResizeWidth.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::TestScreenshot.Properties.Settings.Default, "resizeWidth", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.txtResizeWidth.Location = new System.Drawing.Point(43, 255);
+      this.txtResizeWidth.Name = "txtResizeWidth";
+      this.txtResizeWidth.Size = new System.Drawing.Size(47, 20);
+      this.txtResizeWidth.TabIndex = 31;
+      this.txtResizeWidth.Text = global::TestScreenshot.Properties.Settings.Default.resizeWidth;
+      // 
       // textBox1
       // 
       this.textBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::TestScreenshot.Properties.Settings.Default, "exeName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -386,16 +400,6 @@
       this.textBox1.TabIndex = 6;
       this.textBox1.Text = global::TestScreenshot.Properties.Settings.Default.exeName;
       this.textBox1.Validating += new System.ComponentModel.CancelEventHandler(this.textBox1_Validating);
-      // 
-      // btnStartHyperionMonitor
-      // 
-      this.btnStartHyperionMonitor.Location = new System.Drawing.Point(13, 59);
-      this.btnStartHyperionMonitor.Name = "btnStartHyperionMonitor";
-      this.btnStartHyperionMonitor.Size = new System.Drawing.Size(93, 23);
-      this.btnStartHyperionMonitor.TabIndex = 35;
-      this.btnStartHyperionMonitor.Text = "Start Ambilight";
-      this.btnStartHyperionMonitor.UseVisualStyleBackColor = true;
-      this.btnStartHyperionMonitor.Click += new System.EventHandler(this.btnStartHyperionMonitor_Click);
       // 
       // Form1
       // 
@@ -438,7 +442,7 @@
       this.Controls.Add(this.btnCapture);
       this.Controls.Add(this.btnInject);
       this.Name = "Form1";
-      this.Text = "HyperionDX -  Direct3D API Hook";
+      this.Text = "Test Screenshot Direct3D API Hook";
       this.Load += new System.EventHandler(this.Form1_Load);
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
       this.ResumeLayout(false);

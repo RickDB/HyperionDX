@@ -102,7 +102,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.pictureBox1.Location = new System.Drawing.Point(385, 20);
       this.pictureBox1.Name = "pictureBox1";
-      this.pictureBox1.Size = new System.Drawing.Size(614, 283);
+      this.pictureBox1.Size = new System.Drawing.Size(614, 294);
       this.pictureBox1.TabIndex = 2;
       this.pictureBox1.TabStop = false;
       // 
@@ -443,13 +443,12 @@
       this.cbDrawOverlay.Checked = global::TestScreenshot.Properties.Settings.Default.overlayEnabled;
       this.cbDrawOverlay.CheckState = System.Windows.Forms.CheckState.Checked;
       this.cbDrawOverlay.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::TestScreenshot.Properties.Settings.Default, "overlayEnabled", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-      this.cbDrawOverlay.Location = new System.Drawing.Point(819, 449);
+      this.cbDrawOverlay.Location = new System.Drawing.Point(10, 265);
       this.cbDrawOverlay.Name = "cbDrawOverlay";
       this.cbDrawOverlay.Size = new System.Drawing.Size(90, 17);
       this.cbDrawOverlay.TabIndex = 26;
       this.cbDrawOverlay.Text = "Draw Overlay";
       this.cbDrawOverlay.UseVisualStyleBackColor = true;
-      this.cbDrawOverlay.Visible = false;
       // 
       // textBox1
       // 

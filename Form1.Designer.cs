@@ -57,16 +57,18 @@
       this.label10 = new System.Windows.Forms.Label();
       this.label11 = new System.Windows.Forms.Label();
       this.label12 = new System.Windows.Forms.Label();
-      this.cmbFormat = new System.Windows.Forms.ComboBox();
       this.btnStartHyperionMonitor = new System.Windows.Forms.Button();
+      this.lblHyperionIP = new System.Windows.Forms.Label();
+      this.lblHyperionProtoPort = new System.Windows.Forms.Label();
+      this.tbHyperionInterval = new System.Windows.Forms.TextBox();
       this.tbHyperionProtoPort = new System.Windows.Forms.TextBox();
       this.tbHyperionIP = new System.Windows.Forms.TextBox();
+      this.cmbFormat = new System.Windows.Forms.ComboBox();
       this.txtResizeHeight = new System.Windows.Forms.TextBox();
       this.txtResizeWidth = new System.Windows.Forms.TextBox();
       this.cbDrawOverlay = new System.Windows.Forms.CheckBox();
       this.textBox1 = new System.Windows.Forms.TextBox();
-      this.lblHyperionIP = new System.Windows.Forms.Label();
-      this.lblHyperionProtoPort = new System.Windows.Forms.Label();
+      this.lblHyperionInterval = new System.Windows.Forms.Label();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.SuspendLayout();
       // 
@@ -346,30 +348,42 @@
       this.label12.TabIndex = 33;
       this.label12.Text = "FORMAT:";
       // 
-      // cmbFormat
-      // 
-      this.cmbFormat.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::TestScreenshot.Properties.Settings.Default, "screenshotOutputFormat", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-      this.cmbFormat.FormattingEnabled = true;
-      this.cmbFormat.Items.AddRange(new object[] {
-            "Bitmap",
-            "Jpeg",
-            "Png",
-            "PixelData"});
-      this.cmbFormat.Location = new System.Drawing.Point(69, 288);
-      this.cmbFormat.Name = "cmbFormat";
-      this.cmbFormat.Size = new System.Drawing.Size(101, 21);
-      this.cmbFormat.TabIndex = 34;
-      this.cmbFormat.Text = global::TestScreenshot.Properties.Settings.Default.screenshotOutputFormat;
-      // 
       // btnStartHyperionMonitor
       // 
-      this.btnStartHyperionMonitor.Location = new System.Drawing.Point(16, 116);
+      this.btnStartHyperionMonitor.Location = new System.Drawing.Point(16, 134);
       this.btnStartHyperionMonitor.Name = "btnStartHyperionMonitor";
       this.btnStartHyperionMonitor.Size = new System.Drawing.Size(163, 23);
       this.btnStartHyperionMonitor.TabIndex = 35;
       this.btnStartHyperionMonitor.Text = "Start hyperion forwarding";
       this.btnStartHyperionMonitor.UseVisualStyleBackColor = true;
       this.btnStartHyperionMonitor.Click += new System.EventHandler(this.btnStartHyperionMonitor_Click);
+      // 
+      // lblHyperionIP
+      // 
+      this.lblHyperionIP.AutoSize = true;
+      this.lblHyperionIP.Location = new System.Drawing.Point(13, 59);
+      this.lblHyperionIP.Name = "lblHyperionIP";
+      this.lblHyperionIP.Size = new System.Drawing.Size(65, 13);
+      this.lblHyperionIP.TabIndex = 38;
+      this.lblHyperionIP.Text = "Hyperion IP:";
+      // 
+      // lblHyperionProtoPort
+      // 
+      this.lblHyperionProtoPort.AutoSize = true;
+      this.lblHyperionProtoPort.Location = new System.Drawing.Point(13, 84);
+      this.lblHyperionProtoPort.Name = "lblHyperionProtoPort";
+      this.lblHyperionProtoPort.Size = new System.Drawing.Size(101, 13);
+      this.lblHyperionProtoPort.TabIndex = 39;
+      this.lblHyperionProtoPort.Text = "Hyperion Proto port:";
+      // 
+      // tbHyperionInterval
+      // 
+      this.tbHyperionInterval.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::TestScreenshot.Properties.Settings.Default, "hyperionInterval", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.tbHyperionInterval.Location = new System.Drawing.Point(120, 108);
+      this.tbHyperionInterval.Name = "tbHyperionInterval";
+      this.tbHyperionInterval.Size = new System.Drawing.Size(59, 20);
+      this.tbHyperionInterval.TabIndex = 40;
+      this.tbHyperionInterval.Text = global::TestScreenshot.Properties.Settings.Default.hyperionInterval;
       // 
       // tbHyperionProtoPort
       // 
@@ -388,6 +402,21 @@
       this.tbHyperionIP.Size = new System.Drawing.Size(58, 20);
       this.tbHyperionIP.TabIndex = 36;
       this.tbHyperionIP.Text = global::TestScreenshot.Properties.Settings.Default.hyperionIP;
+      // 
+      // cmbFormat
+      // 
+      this.cmbFormat.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::TestScreenshot.Properties.Settings.Default, "screenshotOutputFormat", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+      this.cmbFormat.FormattingEnabled = true;
+      this.cmbFormat.Items.AddRange(new object[] {
+            "Bitmap",
+            "Jpeg",
+            "Png",
+            "PixelData"});
+      this.cmbFormat.Location = new System.Drawing.Point(69, 288);
+      this.cmbFormat.Name = "cmbFormat";
+      this.cmbFormat.Size = new System.Drawing.Size(101, 21);
+      this.cmbFormat.TabIndex = 34;
+      this.cmbFormat.Text = global::TestScreenshot.Properties.Settings.Default.screenshotOutputFormat;
       // 
       // txtResizeHeight
       // 
@@ -431,29 +460,22 @@
       this.textBox1.Text = global::TestScreenshot.Properties.Settings.Default.exeName;
       this.textBox1.Validating += new System.ComponentModel.CancelEventHandler(this.textBox1_Validating);
       // 
-      // lblHyperionIP
+      // lblHyperionInterval
       // 
-      this.lblHyperionIP.AutoSize = true;
-      this.lblHyperionIP.Location = new System.Drawing.Point(13, 59);
-      this.lblHyperionIP.Name = "lblHyperionIP";
-      this.lblHyperionIP.Size = new System.Drawing.Size(65, 13);
-      this.lblHyperionIP.TabIndex = 38;
-      this.lblHyperionIP.Text = "Hyperion IP:";
-      // 
-      // lblHyperionProtoPort
-      // 
-      this.lblHyperionProtoPort.AutoSize = true;
-      this.lblHyperionProtoPort.Location = new System.Drawing.Point(13, 84);
-      this.lblHyperionProtoPort.Name = "lblHyperionProtoPort";
-      this.lblHyperionProtoPort.Size = new System.Drawing.Size(101, 13);
-      this.lblHyperionProtoPort.TabIndex = 39;
-      this.lblHyperionProtoPort.Text = "Hyperion Proto port:";
+      this.lblHyperionInterval.AutoSize = true;
+      this.lblHyperionInterval.Location = new System.Drawing.Point(13, 111);
+      this.lblHyperionInterval.Name = "lblHyperionInterval";
+      this.lblHyperionInterval.Size = new System.Drawing.Size(89, 13);
+      this.lblHyperionInterval.TabIndex = 41;
+      this.lblHyperionInterval.Text = "Hyperion interval:";
       // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(1002, 526);
+      this.Controls.Add(this.lblHyperionInterval);
+      this.Controls.Add(this.tbHyperionInterval);
       this.Controls.Add(this.lblHyperionProtoPort);
       this.Controls.Add(this.lblHyperionIP);
       this.Controls.Add(this.tbHyperionProtoPort);
@@ -544,6 +566,8 @@
     private System.Windows.Forms.TextBox tbHyperionProtoPort;
     private System.Windows.Forms.Label lblHyperionIP;
     private System.Windows.Forms.Label lblHyperionProtoPort;
+    private System.Windows.Forms.TextBox tbHyperionInterval;
+    private System.Windows.Forms.Label lblHyperionInterval;
   }
 }
 

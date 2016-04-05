@@ -26,5 +26,8 @@
     <Setting Name="screenshotOutputFormat" Type="System.String" Scope="User">
       <Value Profile="(Default)">Bitmap</Value>
     </Setting>
+    <Setting Name="hyperionInterval" Type="System.String" Scope="User">
+      <Value Profile="(Default)">250</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

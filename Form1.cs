@@ -29,23 +29,35 @@ namespace TestScreenshot
     private static TcpClient Socket = new TcpClient();
     private readonly Stream Stream;
     private System.Windows.Forms.Timer hyperionTimer;
+    private string hyperionIP = "10.1.2.83";
+    private int hyperionProtoPort = 19444;
     private int hyperionInterval = 100;
     public Form1()
     {
       InitializeComponent();
 
+      loadSettings();
+
       // PROTO
       Socket = new TcpClient();
       Socket.SendTimeout = 5000;
       Socket.ReceiveTimeout = 5000;
-      Socket.Connect("10.1.2.83", 19445);
+      Socket.Connect(hyperionIP, hyperionProtoPort);
       Stream = Socket.GetStream();
 
       // JSON
-      ConnectToServer("10.1.2.83", 19444);
+      //ConnectToServer("10.1.2.83", 19444);
+
       hyperionTimer = new System.Windows.Forms.Timer();
       hyperionTimer.Interval = hyperionInterval;
       hyperionTimer.Tick += HyperionInterval_Tick;
+    }
+
+    public void loadSettings()
+    {
+      hyperionIP = tbHyperionIP.Text;
+      hyperionProtoPort = int.Parse(tbHyperionProtoPort.Text);
+      hyperionInterval = int.Parse(tbHyperionInterval.Text);
     }
 
     private void HyperionInterval_Tick(object sender, EventArgs e)
@@ -291,9 +303,9 @@ namespace TestScreenshot
               );*/
 
             MemoryStream ms = new System.IO.MemoryStream();
-            screenshot.ToBitmap().Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-
+            screenshot.ToBitmap().Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);        
             byte[] pixeldata = ms.ToArray();
+            //byte[] pixeldata = screenshot.Data;
             pushImage(pixeldata);
             ms.Close();
           }
@@ -364,7 +376,7 @@ namespace TestScreenshot
         // So 3 bytes per pixel, as in RGB.
         // Given pixeldata however is 4 bytes per pixel, as in RGBA.
         // So we need to remove the last byte per pixel.
-        byte[] newpixeldata = new byte[64 * 64 * 3];
+        byte[] newpixeldata = new byte[64*64*3];
         int x = 0;
         int i2 = 0;
         while (i2 <= (newpixeldata.GetLength(0) - 2))
@@ -383,8 +395,13 @@ namespace TestScreenshot
         //var y = Convert.ToBase64String(newpixeldata);
         //setImage(y, 1, 5000);
       }
-      catch (Exception)
+      catch (Exception e)
       {
+        txtDebugLog.Invoke(new MethodInvoker(delegate()
+        {
+          txtDebugLog.Text = String.Format("{0}\r\n{1}", e.Message, txtDebugLog.Text);
+        })
+          );
       }
     }
 

@@ -115,5 +115,17 @@ namespace TestScreenshot.Properties {
                 this["screenshotOutputFormat"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("250")]
+        public string hyperionInterval {
+            get {
+                return ((string)(this["hyperionInterval"]));
+            }
+            set {
+                this["hyperionInterval"] = value;
+            }
+        }
     }
 }

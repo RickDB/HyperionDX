@@ -9,7 +9,7 @@ using Capture;
 using Capture.Interface;
 using System.Windows.Input;
 
-namespace ScreenShot
+namespace HyperionDX
 {
   public partial class MainWindow : Window
   {
@@ -26,6 +26,40 @@ namespace ScreenShot
     public static readonly DependencyProperty InjectedProperty =
       DependencyProperty.Register("Injected", typeof (bool), typeof (MainWindow), new UIPropertyMetadata(false));
 
+    public void SaveSettings()
+    {
+      try
+      {
+        hyperionIP = tbHyperionIP.Text;
+        hyperionProtoPort = int.Parse(tbHyperionPort.Text);
+        bmpFrameDelay = int.Parse(tbFrameDelay.Text);
+
+        Settings.Default.hyperionIP = hyperionIP;
+        Settings.Default.hyperionPort = hyperionProtoPort;
+        Settings.Default.frameDelay = bmpFrameDelay;
+        Settings.Default.Save();
+      }
+      catch (Exception)
+      {
+      }
+    }
+
+    public void LoadSettings()
+    {
+      try
+      {
+        hyperionIP = Settings.Default.hyperionIP;
+        hyperionProtoPort = Settings.Default.hyperionPort;
+        bmpFrameDelay = Settings.Default.frameDelay;
+
+        tbHyperionIP.Text = hyperionIP;
+        tbHyperionPort.Text = hyperionProtoPort.ToString();
+        tbFrameDelay.Text = bmpFrameDelay.ToString();
+      }
+      catch (Exception)
+      {
+      }
+    }
     public bool Injected
     {
       get { return (bool) GetValue(InjectedProperty); }
@@ -81,6 +115,8 @@ namespace ScreenShot
         MessageBox.Show("App will terminate");
         Application.Current.Shutdown();
       };
+
+      LoadSettings();
     }
 
     void Inject()
@@ -204,6 +240,8 @@ namespace ScreenShot
       //       if not the currently focused window
       if (!Recording)
       {
+        SaveSettings();
+        LoadSettings();
         _captureProcess.BringProcessWindowToFront();
 
         start = DateTime.Now;
@@ -231,31 +269,9 @@ namespace ScreenShot
       }
     }
 
-    private void HyperionIP_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
-        hyperionIP = HyperionIP.Text;
-    }
-
-    private void HyperionPort_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-    {
-      try
-      {
-          hyperionProtoPort = int.Parse(HyperionPort.Text);
-      }
-      catch (Exception)
-      {
-      }
-    }
-
-    private void FrameDelay_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-    {
-      try
-      {
-        bmpFrameDelay = int.Parse(FrameDelay.Text);
-      }
-      catch (Exception)
-      {
-      }
+      SaveSettings();
     }
   }
 }

@@ -8,7 +8,7 @@ using proto;
 using System.Linq;
 using System.Windows;
 
-namespace ScreenShot
+namespace HyperionDX
 {
 
   /// <summary>

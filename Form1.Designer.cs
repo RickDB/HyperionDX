@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
       this.btnInject = new System.Windows.Forms.Button();
       this.btnCapture = new System.Windows.Forms.Button();
       this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -515,8 +516,9 @@
       this.Controls.Add(this.pictureBox1);
       this.Controls.Add(this.btnCapture);
       this.Controls.Add(this.btnInject);
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "Form1";
-      this.Text = "Test Screenshot Direct3D API Hook";
+      this.Text = "HyperionDX - Direct3D API Hook";
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
       this.Load += new System.EventHandler(this.Form1_Load);
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

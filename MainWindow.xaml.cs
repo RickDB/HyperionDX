@@ -37,6 +37,7 @@ namespace HyperionDX
         Settings.Default.hyperionIP = hyperionIP;
         Settings.Default.hyperionPort = hyperionProtoPort;
         Settings.Default.frameDelay = bmpFrameDelay;
+        Settings.Default.exeName = tbExeName.Text;
         Settings.Default.Save();
       }
       catch (Exception)
@@ -55,6 +56,7 @@ namespace HyperionDX
         tbHyperionIP.Text = hyperionIP;
         tbHyperionPort.Text = hyperionProtoPort.ToString();
         tbFrameDelay.Text = bmpFrameDelay.ToString();
+        tbExeName.Text = Settings.Default.exeName;
       }
       catch (Exception)
       {
@@ -69,7 +71,7 @@ namespace HyperionDX
 
         InjectButton.Content = value ? "Detach" : "Inject";
 
-        ExeName.IsEnabled = !value;
+        tbExeName.IsEnabled = !value;
       }
     }
 
@@ -93,7 +95,7 @@ namespace HyperionDX
 
       CommandBindings.Add(new CommandBinding(ApplicationCommands.Open,
         (s, e) => Inject(),
-        (s, e) => e.CanExecute = Process.GetProcessesByName(ExeName.Text).Length > 0));
+        (s, e) => e.CanExecute = Process.GetProcessesByName(tbExeName.Text).Length > 0));
 
       CommandBindings.Add(new CommandBinding(ApplicationCommands.New,
         (s, e) => Record(),
@@ -129,9 +131,6 @@ namespace HyperionDX
           _captureProcess.CaptureInterface.Disconnect();
           _captureProcess = null;
           Injected = false;
-          Task.Factory.StartNew(() => Writer.SendColorToHyperion(0, 0, 0));
-          Task.Factory.StartNew(() => Writer.SendColorToHyperion(0, 0, 0));
-          Task.Factory.StartNew(() => Writer.SendColorToHyperion(0, 0, 0));
         }
       }
       catch (Exception E)
@@ -143,7 +142,7 @@ namespace HyperionDX
 
     void AttachProcess()
     {
-      string exeName = Path.GetFileNameWithoutExtension(ExeName.Text);
+      string exeName = Path.GetFileNameWithoutExtension(tbExeName.Text);
 
       Process[] processes = Process.GetProcessesByName(exeName);
 
@@ -226,6 +225,11 @@ namespace HyperionDX
         {
           if (Writer != null)
           {
+            // Clear leds
+            Thread.Sleep(250);
+            Task.Factory.StartNew(() => Writer.SendColorToHyperion(0, 0, 0));
+            Thread.Sleep(250);
+            Task.Factory.StartNew(() => Writer.SendColorToHyperion(0, 0, 0));
             Writer.Dispose();
             Writer = null;
           }

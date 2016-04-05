@@ -159,6 +159,7 @@ namespace HyperionDX
 
       byte[] pixelData = reader.ReadBytes((int) (stream.Length - stream.Position));
 
+      /*
       byte[] h1pixelData = new byte[64*rgb];
       byte[] h2pixelData = new byte[64*rgb];
 
@@ -171,7 +172,7 @@ namespace HyperionDX
         Array.Copy(pixelData, (64 - i - 1)*64*rgb, h2pixelData, 0, 64*rgb);
         Array.Copy(h1pixelData, 0, pixelData, (64 - i - 1)*64*rgb, 64*rgb);
         Array.Copy(h2pixelData, 0, pixelData, i*64*rgb, 64*rgb);
-      }
+      }*/
 
       try
       {

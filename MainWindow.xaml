@@ -14,7 +14,7 @@
                                 Name="InjectButton" 
                                 Content="Inject"
                                 DockPanel.Dock="Right"/>
-                        <TextBox Name="ExeName"/>
+                        <TextBox x:Name="tbExeName"/>
                     </DockPanel>
                     <DockPanel>
                       <Label Content="Hyperion IP:"/>

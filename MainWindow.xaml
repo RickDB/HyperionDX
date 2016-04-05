@@ -1,7 +1,7 @@
 ﻿<Window x:Class="HyperionDX.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="HyperionDX - D3D Capture" Height="350" Width="525" Closing="Window_Closing">
+        Title="HyperionDX - D3D Capture" Height="350" Width="525" Closing="Window_Closing" Icon="favicon.ico">
   <Grid>
         <DockPanel>
             <ScrollViewer VerticalScrollBarVisibility="Auto"

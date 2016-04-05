@@ -385,6 +385,7 @@
       this.tbHyperionInterval.Size = new System.Drawing.Size(59, 20);
       this.tbHyperionInterval.TabIndex = 40;
       this.tbHyperionInterval.Text = global::TestScreenshot.Properties.Settings.Default.hyperionInterval;
+      this.tbHyperionInterval.Validating += new System.ComponentModel.CancelEventHandler(this.tbHyperionInterval_Validating);
       // 
       // tbHyperionProtoPort
       // 
@@ -394,6 +395,7 @@
       this.tbHyperionProtoPort.Size = new System.Drawing.Size(58, 20);
       this.tbHyperionProtoPort.TabIndex = 37;
       this.tbHyperionProtoPort.Text = global::TestScreenshot.Properties.Settings.Default.hyperionProtoPort;
+      this.tbHyperionProtoPort.Validating += new System.ComponentModel.CancelEventHandler(this.tbHyperionProtoPort_Validating);
       // 
       // tbHyperionIP
       // 
@@ -403,6 +405,7 @@
       this.tbHyperionIP.Size = new System.Drawing.Size(58, 20);
       this.tbHyperionIP.TabIndex = 36;
       this.tbHyperionIP.Text = global::TestScreenshot.Properties.Settings.Default.hyperionIP;
+      this.tbHyperionIP.Validating += new System.ComponentModel.CancelEventHandler(this.tbHyperionIP_Validating);
       // 
       // cmbFormat
       // 

@@ -32,6 +32,7 @@ namespace TestScreenshot
     private string hyperionIP = "10.1.2.83";
     private int hyperionProtoPort = 19444;
     private int hyperionInterval = 100;
+    private bool sendImageLock;
     public Form1()
     {
       InitializeComponent();
@@ -77,7 +78,12 @@ namespace TestScreenshot
 
     private void btnInject_Click(object sender, EventArgs e)
     {
-      if (_captureProcess == null)
+      doAttachDetach(true);
+    }
+
+    private void doAttachDetach(bool attach)
+    {
+      if (_captureProcess == null && attach)
       {
         btnInject.Enabled = false;
 
@@ -98,9 +104,12 @@ namespace TestScreenshot
       }
       else
       {
-        HookManager.RemoveHookedProcess(_captureProcess.Process.Id);
-        _captureProcess.CaptureInterface.Disconnect();
-        _captureProcess = null;
+        if (_captureProcess != null)
+        {
+          HookManager.RemoveHookedProcess(_captureProcess.Process.Id);
+          _captureProcess.CaptureInterface.Disconnect();
+          _captureProcess = null;
+        }
       }
 
       if (_captureProcess != null)
@@ -112,6 +121,8 @@ namespace TestScreenshot
       {
         btnInject.Text = "Inject";
         btnInject.Enabled = true;
+        hyperionTimer.Stop();
+        btnStartHyperionMonitor.Text = "Start Hyperion forwarding";
       }
     }
 
@@ -259,8 +270,8 @@ namespace TestScreenshot
           //_captureProcess.BringProcessWindowToFront();
           // Initiate the screenshot of the CaptureInterface, the appropriate event handler within the target process will take care of the rest
           Size? resize = null;
-          if (!String.IsNullOrEmpty(txtResizeHeight.Text) && !String.IsNullOrEmpty(txtResizeWidth.Text))
-            resize = new System.Drawing.Size(int.Parse(txtResizeWidth.Text), int.Parse(txtResizeHeight.Text));
+          /*if (!String.IsNullOrEmpty(txtResizeHeight.Text) && !String.IsNullOrEmpty(txtResizeWidth.Text))
+            resize = new System.Drawing.Size(int.Parse(txtResizeWidth.Text), int.Parse(txtResizeHeight.Text));*/
           _captureProcess.CaptureInterface.BeginGetScreenshot(
             new Rectangle(int.Parse(txtCaptureX.Text), int.Parse(txtCaptureY.Text), int.Parse(txtCaptureWidth.Text),
               int.Parse(txtCaptureHeight.Text)), new TimeSpan(0, 0, 2), Callback, resize,
@@ -284,6 +295,11 @@ namespace TestScreenshot
     /// <param name="screenshotResponse"></param>
     void Callback(IAsyncResult result)
     {
+      if (_captureProcess == null)
+      {
+        doAttachDetach(false);
+        return;
+      }
       using (Screenshot screenshot = _captureProcess.CaptureInterface.EndGetScreenshot(result))
         try
         {
@@ -303,9 +319,8 @@ namespace TestScreenshot
               );*/
 
             MemoryStream ms = new System.IO.MemoryStream();
-            screenshot.ToBitmap().Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);        
+            screenshot.ToBitmap().Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
             byte[] pixeldata = ms.ToArray();
-            //byte[] pixeldata = screenshot.Data;
             pushImage(pixeldata);
             ms.Close();
           }
@@ -313,8 +328,13 @@ namespace TestScreenshot
           Thread t = new Thread(new ThreadStart(DoRequest));
           t.Start();
         }
-        catch
+        catch (Exception e)
         {
+          txtDebugLog.Invoke(new MethodInvoker(delegate()
+          {
+            txtDebugLog.Text = String.Format("Callback error: {0}\r\n{1}", e.Message, txtDebugLog.Text);
+          })
+            );
         }
     }
 
@@ -343,7 +363,12 @@ namespace TestScreenshot
 
     private void pushImage(byte[] pixeldataRaw)
     {
+      if (sendImageLock)
+      {
+        return;
+      }
 
+      sendImageLock = true;
       MemoryStream stream = new MemoryStream(pixeldataRaw);
       BinaryReader reader = new BinaryReader(stream);
 
@@ -390,7 +415,7 @@ namespace TestScreenshot
 
         // PROTO
         ChangeImage(newpixeldata, null);
-
+        sendImageLock = false;
         // JSON
         //var y = Convert.ToBase64String(newpixeldata);
         //setImage(y, 1, 5000);
@@ -399,9 +424,10 @@ namespace TestScreenshot
       {
         txtDebugLog.Invoke(new MethodInvoker(delegate()
         {
-          txtDebugLog.Text = String.Format("{0}\r\n{1}", e.Message, txtDebugLog.Text);
+          txtDebugLog.Text = String.Format("Push image error: {0}\r\n{1}", e.Message, txtDebugLog.Text);
         })
           );
+        sendImageLock = false;
       }
     }
 
@@ -551,6 +577,22 @@ namespace TestScreenshot
     private void Form1_FormClosing(object sender, FormClosingEventArgs e)
     {
       Properties.Settings.Default.Save();
+      doAttachDetach(false);
+    }
+
+    private void tbHyperionIP_Validating(object sender, CancelEventArgs e)
+    {
+      loadSettings();
+    }
+
+    private void tbHyperionProtoPort_Validating(object sender, CancelEventArgs e)
+    {
+      loadSettings();
+    }
+
+    private void tbHyperionInterval_Validating(object sender, CancelEventArgs e)
+    {
+      loadSettings();
     }
   }
 }

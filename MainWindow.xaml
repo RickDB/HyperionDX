@@ -1,0 +1,52 @@
+﻿<Window x:Class="ScreenShot.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="HyperionDX - D3D Capture" Height="350" Width="525">
+    <Grid>
+        <DockPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          DockPanel.Dock="Top">
+                <StackPanel>
+                    <DockPanel>
+                        <Label Content="Exe Name of D3D App:"/>
+                        <Button Width="100"
+                                Command="Open"
+                                Name="InjectButton" 
+                                Content="Inject"
+                                DockPanel.Dock="Right"/>
+                        <TextBox Name="ExeName"/>
+                    </DockPanel>
+                    <DockPanel>
+                      <Label Content="Hyperion IP:"/>
+                      <TextBox Name="HyperionIP" Width="69" HorizontalAlignment="Left" Height="18" Text="10.1.2.83" TextChanged="HyperionIP_TextChanged"/>
+            <Label Content="Hyperion port:" Width="89"/>
+            <TextBox x:Name="HyperionPort" Width="46" HorizontalAlignment="Left" Text="19445" Height="18" TextChanged="HyperionPort_TextChanged"/>
+            <Label Content="Frame delay:" Width="74"/>
+            <TextBox x:Name="FrameDelay" Width="46" HorizontalAlignment="Left" Text="60" Height="18" TextChanged="FrameDelay_TextChanged"/>
+          </DockPanel>
+                    <DockPanel>
+                        <Button Name="RecordButton"
+                                Content="Start Hyperion forwarding"
+                                Command="New"/>
+                    </DockPanel>
+
+                    <DockPanel>
+                        <Label Content="DirectX Version:"/>
+                        <ComboBox Name="DXVersion" 
+                                  SelectedIndex="0">
+                            <ComboBoxItem Content="Auto Detect"/>
+                            <ComboBoxItem Content="Direct3D 9"/>
+                            <ComboBoxItem Content="Direct3D 10"/>
+                            <ComboBoxItem Content="Direct3D 10.1"/>
+                            <ComboBoxItem Content="Direct3D 11"/>
+                        </ComboBox>
+                    </DockPanel>
+                </StackPanel>
+            </ScrollViewer>
+
+            <TextBox IsReadOnly="True"
+                     Name="Log"
+                     VerticalScrollBarVisibility="Auto"/>
+        </DockPanel>
+    </Grid>
+</Window>

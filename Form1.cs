@@ -29,7 +29,7 @@ namespace TestScreenshot
     private static TcpClient Socket = new TcpClient();
     private readonly Stream Stream;
     private System.Windows.Forms.Timer hyperionTimer;
-    private int hyperionInterval = 250;
+    private int hyperionInterval = 100;
     public Form1()
     {
       InitializeComponent();
@@ -224,7 +224,7 @@ namespace TestScreenshot
       // Note: we bring the target application into the foreground because
       //       windowed Direct3D applications have a lower framerate 
       //       if not the currently focused window
-      _captureProcess.BringProcessWindowToFront();
+      //_captureProcess.BringProcessWindowToFront();
       start = DateTime.Now;
       progressBar1.Maximum = Convert.ToInt32(txtNumber.Text);
       progressBar1.Minimum = 0;
@@ -244,7 +244,7 @@ namespace TestScreenshot
         {
           progressBar1.PerformStep();
 
-          _captureProcess.BringProcessWindowToFront();
+          //_captureProcess.BringProcessWindowToFront();
           // Initiate the screenshot of the CaptureInterface, the appropriate event handler within the target process will take care of the rest
           Size? resize = null;
           if (!String.IsNullOrEmpty(txtResizeHeight.Text) && !String.IsNullOrEmpty(txtResizeWidth.Text))
@@ -521,12 +521,19 @@ namespace TestScreenshot
     {
       if (hyperionTimer.Enabled)
       {
+        btnStartHyperionMonitor.Text = "Start Hyperion forwarding";
         hyperionTimer.Stop();
       }
       else
       {
+        btnStartHyperionMonitor.Text = "Stop Hyperion forwarding";
         hyperionTimer.Start();
       }
+    }
+
+    private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+    {
+      Properties.Settings.Default.Save();
     }
   }
 }

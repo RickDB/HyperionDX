@@ -14,5 +14,17 @@
     <Setting Name="resizeHeight" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="overlayEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="hyperionIP" Type="System.String" Scope="User">
+      <Value Profile="(Default)">10.1.2.83</Value>
+    </Setting>
+    <Setting Name="hyperionProtoPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">19445</Value>
+    </Setting>
+    <Setting Name="screenshotOutputFormat" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Bitmap</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

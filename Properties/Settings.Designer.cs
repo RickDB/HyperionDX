@@ -67,5 +67,53 @@ namespace TestScreenshot.Properties {
                 this["resizeHeight"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool overlayEnabled {
+            get {
+                return ((bool)(this["overlayEnabled"]));
+            }
+            set {
+                this["overlayEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10.1.2.83")]
+        public string hyperionIP {
+            get {
+                return ((string)(this["hyperionIP"]));
+            }
+            set {
+                this["hyperionIP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("19445")]
+        public string hyperionProtoPort {
+            get {
+                return ((string)(this["hyperionProtoPort"]));
+            }
+            set {
+                this["hyperionProtoPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Bitmap")]
+        public string screenshotOutputFormat {
+            get {
+                return ((string)(this["screenshotOutputFormat"]));
+            }
+            set {
+                this["screenshotOutputFormat"] = value;
+            }
+        }
     }
 }
